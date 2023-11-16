@@ -1,3 +1,25 @@
+/*
+Hai do thi vo huong, lien thong khi giua hai dinh luon co duong di
++ Dem so thanh phan lien thong
++ Check xem do thi co lien thong hay khong 
+
+pseudocode:
+ConnectedComponent()
+{
+    // Khoi tao so thanh phan lien thong an dau cua do thi = 0
+    cnt = 0;
+    // Dem so thanh phan lien thong
+    for (int i = 1; i <= n; i++)
+    {
+        if (!visited[i])
+        {
+            ++cnt; // tang so thanh phan lien thong
+            dfs(i); // bfs(i)
+        }
+    }
+    return cnt;
+}
+*/
 #include <iostream>
 #include <vector>
 #include <queue>

@@ -1,3 +1,37 @@
+/*
+BFS (Breath First Search)
+Tu tuong cua thuat toan BFS la tim kiem uu tien chieu rong hon la chieu sau
+Thuat toan se tim kiem xung quanh de mo rong truoc khi di xuong xau hon
+
+Pseudocode:
+BFS (u)
+{
+    // Step 1: Khoi tao
+    queue = empty; // Tao mot hang doi rong
+    push(queue, u); // Day dinh u vao hang doi
+    visited[u] = true; // danh dau dinh u da duoc tham
+
+    // step 2: lap khi hang doi van con phan tu
+    while (queue != empty)
+    {
+        v = queue.front(); // lay ra dinh o dau hang doi
+        queue.pop(); // xoa dinh khoi dau hang doi
+        <tham dinh v>;
+        // Duyet cac dinh ke voi dinh v ma chua duoc tham va day vao hang doi
+        for (int x : ke[v])
+        {
+            if (!visited[x]) // neu x chua duoc tham
+            {
+                push(queue, x);
+                visited[x] = true;
+            }
+        }
+    }
+}
+
+doi voi nhung bai toan khong co trong so, thi BFS se cho ta duong di ngan nhat
+*/
+
 #include <iostream>
 #include <vector>
 #include <queue>
@@ -83,3 +117,6 @@ int main()
 7 3
 8 9
 */
+
+// From 28tech
+
