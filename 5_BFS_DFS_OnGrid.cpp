@@ -174,7 +174,7 @@ x: khong co duong di
 
 */
 
-#if 1
+#if 0
 #include <iostream>
 #include <cstring>
 #include <queue>
@@ -214,7 +214,8 @@ bool BFS(int i, int j)
     cout << i << " " << j << endl;
     while (!q.empty())
     {
-        pair<int, int> top = q.front(); q.pop();
+        pair<int, int> top = q.front();
+        q.pop();
         // duyet cac dinh ke
         for (int k = 0; k < 4; k++)
         {
@@ -223,7 +224,7 @@ bool BFS(int i, int j)
             if (i1 >= 1 && i1 <= point && j1 >= 1 && j1 <= point && arr[i1][j1] != 'x')
             {
                 cout << i1 << " " << j1 << endl;
-                if (arr[i][j] == 'B')
+                if (arr[i1][j1] == 'B')
                     return true;
                 q.push({i1, j1});
                 arr[i1][j1] = 'o';
@@ -277,3 +278,100 @@ Boooxo
 oooxxx
 */
 #endif 
+
+// Bai 3: Tim so buoc di toi thieu giua 2 o tren luoi
+/*
+=> Su dung thuat toan BFS
+*/
+#if 1
+#include <iostream>
+#include <cstring>
+#include <queue>
+using namespace std;
+
+int edge, point, x1, y1, u, v;
+char arr[1001][1001];
+bool visited[1001][1001];
+int d[1001][1001]; // d[i][j] : luu so buoc di tu o bat dau toi o i,j
+
+int dx[] = {-1, 0, 0, 1};
+int dy[] = {0, -1, 1, 0};
+
+void BFS(int i, int j)
+{
+    queue<pair<int, int>> q;
+    q.push({i, j});
+    arr[i][j] = 'o';
+    d[i][j] = 0;
+    while (!q.empty())
+    {
+        pair<int, int> top = q.front();
+        q.pop();
+        // duyet cac dinh ke
+        for (int k = 0; k < 4; k++)
+        {
+            int i1 = top.first + dx[k];
+            int j1 = top.second + dy[k];
+            if (i1 >= 1 && i1 <= point && j1 >= 1 && j1 <= point && arr[i1][j1] != 'x')
+            {
+                d[i1][j1] = d[top.first][top.second] + 1;
+                if (arr[i1][j1] == 'B')
+                    return;
+                q.push({i1, j1});
+                arr[i1][j1] = 'x';
+            }
+        }
+    }
+}
+
+void Input()
+{
+    cin >> edge >> point;
+    for (int i = 1; i <= point; i++)
+    {
+        for (int j = 1; j <= point; j++)
+        {
+            cin >> arr[i][j];
+            if (arr[i][j] == 'A')
+            {
+                x1 = i; y1 = j;
+            }
+            else if (arr[i][j] == 'B')
+            {
+                u = i; v = j;
+            }
+            
+        }
+    }
+    memset(visited, false, sizeof(visited));
+    BFS(x1, y1);
+    if (!d[u][v])
+    {
+        cout << "Khong";
+    }
+    else
+        cout << d[u][v] << " ";
+}
+
+int main()
+{
+    Input();
+    return 0;
+}
+/*
+6 6
+Aooxoo
+oxoooo
+oxoooo
+xoooxx
+Bxooxo
+oxoxxx
+
+giai bai tap:
+Tim duong di cho bai tren: vi du o bai tren se la di xuong 4 lan => in ra Down Down Down Down
+
+Di chuyen giua hai o nao do co so luong buoc di cho truoc
+
+Di chuyen giua hai o nao do nhung khong cho phep thay doi huong di qua n lan
+*/
+#endif
