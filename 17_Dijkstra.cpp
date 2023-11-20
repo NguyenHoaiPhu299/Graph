@@ -41,22 +41,24 @@ Gia su: d[u] = 50 (khoang cach tu dinh nguon toi dinh u = 50)
 #include <iostream>
 #include <queue>
 #include <vector>
+#include <algorithm>
 using namespace std;
 #define MAX 100001
 
 using ll = long long;
 
-int n, m;
+int n, m, s, t;
 vector<pair<int, int>> adj[MAX];
 
 void Input()
 {
-    cin >> n >> m;
+    cin >> n >> m >> s >> t;
     for (int i = 0; i < m; i++)
     {
         int x, y, w;
         cin >> x >> y >> w;
         adj[x].push_back({y, w});
+        adj[y].push_back({x, w});
     }
 }
 
@@ -67,14 +69,138 @@ void Dijkstra(int s)
     // Mang luu khoang cach duong di
     vector<ll> d(n + 1, INF);
     d[s] = 0;
-    priority_queue<
-    pair<int, int>, 
-    vector<pair<int, int>>, 
-    greater<pair<int, int>> > Q;
+    // Luu {khoang cach cua dinh nguon den dinh hien tai, dinh hien tai} 
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>> > Q;
+    Q.push({0, s});
+    while (!Q.empty())
+    {
+        // Chon ra dinh co khoang cach tu s nho nhat
+        pair<int, int>  top = Q.top(); Q.pop();
+        int u = top.second;
+        int kc = top.first;
+        if (kc > d[u])
+        {
+            continue;
+        }
+        for (auto it : adj[u])
+        {
+            int v = it.first;
+            int w = it.second;
+            if (d[v] > d[u] + w)
+            {
+                d[v] = d[u] + w;
+                Q.push({d[v], v});
+            }
+        }
+    }
+    for (int i = 1; i <= n; i++)
+    {
+        cout << d[i] << " ";
+    }
+    cout << endl;
+}
+
+void Dijkstra_2(int s)
+{
+    // Mang luu khoang cach duong di
+    vector<ll> d(n + 1, INF);
+    vector<bool> visited(n + 1, false);
+    d[s] = 0;
+    // Luu {khoang cach cua dinh nguon den dinh hien tai, dinh hien tai} 
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>> > Q;
+    Q.push({0, s});
+    while (!Q.empty())
+    {
+        // Chon ra dinh co khoang cach tu s nho nhat
+        pair<int, int>  top = Q.top(); Q.pop();
+        int u = top.second;
+        int kc = top.first;
+        if (visited[u]) continue;
+        visited[u] = true;
+        for (auto it : adj[u])
+        {
+            int v = it.first;
+            int w = it.second;
+            if (d[v] > d[u] + w)
+            {
+                d[v] = d[u] + w;
+                Q.push({d[v], v});
+            }
+        }
+    }
+    for (int i = 1; i <= n; i++)
+    {
+        cout << d[i] << " ";
+    }
+    cout << endl;
+}
+
+int pre[MAX];
+
+void Dijkstra(int s, int t)
+{
+    // Mang luu khoang cach duong di
+    vector<ll> d(n + 1, INF);
+    d[s] = 0;
+    pre[s] = s;
+    // Luu {khoang cach cua dinh nguon den dinh hien tai, dinh hien tai} 
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>> > Q;
+    Q.push({0, s});
+    while (!Q.empty())
+    {
+        // Chon ra dinh co khoang cach tu s nho nhat
+        pair<int, int>  top = Q.top(); Q.pop();
+        int u = top.second;
+        int kc = top.first;
+        if (kc > d[u])
+        {
+            continue;
+        }
+        for (auto it : adj[u])
+        {
+            int v = it.first;
+            int w = it.second;
+            if (d[v] > d[u] + w)
+            {
+                d[v] = d[u] + w;
+                Q.push({d[v], v});
+                pre[v] = u;
+            }
+        }
+    }
+    cout << d[t] << endl;
+    vector<int> path;
+    while (1)
+    {
+        path.push_back(t);
+        if (t == s)
+        {
+            break;
+        }
+        t = pre[t];
+    }
+    reverse(path.begin(), path.end());
+    for (int x : path)
+    {
+        cout << x << " ";
+    }
 }
 
 int main()
 {
     Input();
+    Dijkstra(s);
+    Dijkstra(s, t);
     return 0;
 }
+/*
+6 8 1 5
+1 2 7 
+1 3 12
+2 3 2
+2 4 9
+3 5 10
+5 4 4
+5 6 5
+4 6 1
+*/
